@@ -646,11 +646,10 @@ const encoderFilter = (enc: string, highRes: boolean) => {
     return false;
   }
 
-  // NVENC can do 8K as far back as Pascal generation (2016)
+  // NVENC can do 8K on HEVC as far back as Pascal generation (2016)
   if (highRes) {
     return (
       encoder === ESupportedEncoders.OBS_X264 ||
-      encoder === ESupportedEncoders.JIM_NVENC ||
       encoder === ESupportedEncoders.JIM_HEVC_NVENC ||
       encoder === ESupportedEncoders.JIM_AV1_NVENC
     );

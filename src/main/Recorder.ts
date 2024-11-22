@@ -459,7 +459,7 @@ export default class Recorder extends EventEmitter {
     Recorder.applySetting('Output', 'RecEncoder', obsRecEncoder);
     Recorder.applySetting('Output', 'RecFormat', 'mp4');
 
-    // We set the CPQ or CRF value here. Low value is higher quality, and
+    // We set the CQP or CRF value here. Low value is higher quality, and
     // vice versa. The limits on what this can actually be set to I took
     // from what OBS studio allows and is annotated below, but we don't
     // go to the extremes of the allowed range anyway.
@@ -480,16 +480,19 @@ export default class Recorder extends EventEmitter {
       case ESupportedEncoders.JIM_NVENC:
       case ESupportedEncoders.JIM_HEVC_NVENC:
       case ESupportedEncoders.JIM_AV1_NVENC:
-        // Some sane settings for CQP recordings, idk if they actually apply,
+        // Some reasonable settings for CQP recordings, idk if they actually apply,
         // haven't verified it. These will have to be updated with OBS 31 (probably)
         Recorder.applySetting('Output', 'Recrate_control', 'CQP');
         Recorder.applySetting('Output', 'Reccqp', cqp);
         Recorder.applySetting('Output', 'Recpreset2', 'p1');
-        Recorder.applySetting('Output', 'Recbf', 2);
-        Recorder.applySetting('Output', 'Recpsycho_aq', 'false');
-        Recorder.applySetting('Output', 'Reclookahead', 'false');
         Recorder.applySetting('Output', 'Rectuning', 'hq');
+        Recorder.applySetting('Output', 'Recbf', 2);
+        // AQ and Multipass don't do anything in CQP mode, Adaptive I/B frames
+        // from Lookahead aren't very valuable in CQP mode
+        // LA is also off by default anyway so nothing changes
+        Recorder.applySetting('Output', 'Recpsycho_aq', 'false');
         Recorder.applySetting('Output', 'Recmultipass', 'disabled');
+        Recorder.applySetting('Output', 'Reclookahead', 'false');
         break;
 
       default:
