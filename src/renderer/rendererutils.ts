@@ -19,11 +19,11 @@ import {
 } from 'main/constants';
 import { TimelineSegmentType } from 'main/keystone';
 import {
-  MarkerColors,
   DeathMarkers,
   Encoder,
   EncoderType,
   IOBSDevice,
+  MarkerColors,
   PlayerDeathType,
   RawChallengeModeTimelineSegment,
   RendererVideo,
@@ -646,9 +646,14 @@ const encoderFilter = (enc: string, highRes: boolean) => {
     return false;
   }
 
-  // If we have a resolution above 4k, only the software encoder is valid.
+  // NVENC can do 8K as far back as Pascal generation (2016)
   if (highRes) {
-    return encoder === ESupportedEncoders.OBS_X264 || encoder === ESupportedEncoders.JIM_HEVC_NVENC;
+    return (
+      encoder === ESupportedEncoders.OBS_X264 ||
+      encoder === ESupportedEncoders.JIM_NVENC ||
+      encoder === ESupportedEncoders.JIM_HEVC_NVENC ||
+      encoder === ESupportedEncoders.JIM_AV1_NVENC
+    );
   }
 
   return true;

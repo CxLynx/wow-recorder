@@ -474,11 +474,22 @@ export default class Recorder extends EventEmitter {
         break;
 
       case ESupportedEncoders.AMD_AMF_H264:
-      case ESupportedEncoders.JIM_NVENC:
-      case ESupportedEncoders.JIM_HEVC_NVENC:
-        // These settings are identical for AMD and NVENC encoders.
         Recorder.applySetting('Output', 'Recrate_control', 'CQP');
         Recorder.applySetting('Output', 'Reccqp', cqp);
+        break;
+      case ESupportedEncoders.JIM_NVENC:
+      case ESupportedEncoders.JIM_HEVC_NVENC:
+      case ESupportedEncoders.JIM_AV1_NVENC:
+        // Some sane settings for CQP recordings, idk if they actually apply,
+        // haven't verified it. These will have to be updated with OBS 31 (probably)
+        Recorder.applySetting('Output', 'Recrate_control', 'CQP');
+        Recorder.applySetting('Output', 'Reccqp', cqp);
+        Recorder.applySetting('Output', 'Recpreset2', 'p1');
+        Recorder.applySetting('Output', 'Recbf', 2);
+        Recorder.applySetting('Output', 'Recpsycho_aq', 'false');
+        Recorder.applySetting('Output', 'Reclookahead', 'false');
+        Recorder.applySetting('Output', 'Rectuning', 'hq');
+        Recorder.applySetting('Output', 'Recmultipass', 'disabled');
         break;
 
       default:
